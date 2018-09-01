@@ -1,9 +1,18 @@
 // Compound Components
 
-import React from 'react'
+import React, {Fragment} from 'react'
 import {Switch} from '../switch'
 
 class Toggle extends React.Component {
+  static On = ({on, children}) =>
+    on && <Fragment>{children}</Fragment>
+
+  static Off = ({on, children}) =>
+    !on && <Fragment>{children}</Fragment>
+
+  static Button = ({on, onToggle}) => (
+    <Switch on={on} onClick={onToggle} />
+  )
   // you can create function components as static properties!
   // for example:
   // static Candy = (props) => <div>CANDY! {props.children}</div>
@@ -34,7 +43,10 @@ class Toggle extends React.Component {
     //
     // 🐨 you'll want to completely replace the code below with the above logic.
     const {on} = this.state
-    return <Switch on={on} onClick={this.toggle} />
+    const {children} = this.props
+    return React.Children.map(children, child =>
+      React.cloneElement(child, {on, onToggle: this.toggle}),
+    )
   }
 }
 
