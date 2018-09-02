@@ -4,6 +4,13 @@
 workshop repo to teach you about using React Component Patterns to make your
 react components more useful and reusable without sacrificing simplicity.
 
+## My comments while following along
+Exercises 1-3 show a nice way on how to use Context to create easy to use APIs.
+Exporting the child components as static properties of the main component helps users understand the relationship between child and parent components. Seems a better choice than exporting them as named exports. 
+Context API is used by the parent component to provide the significant props to all the children, regardless of their position in the hierarchy.
+
+Exercises 4-7 show us how to use render props. I am not too fond of it - it seems like an difficult to understand mess of an API as visible in [downshift](https://github.com/paypal/downshift).
+
 ## Following along with Frontend Masters?
 
 Head to
