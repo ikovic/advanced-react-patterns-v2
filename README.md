@@ -9,7 +9,9 @@ Exercises 1-3 show a nice way on how to use Context to create easy to use APIs.
 Exporting the child components as static properties of the main component helps users understand the relationship between child and parent components. Seems a better choice than exporting them as named exports. 
 Context API is used by the parent component to provide the significant props to all the children, regardless of their position in the hierarchy.
 
-Exercises 4-7 show us how to use render props. I am not too fond of it - it seems like an difficult to understand mess of an API as visible in [downshift](https://github.com/paypal/downshift).
+Exercises 4-7 show us how to use render props. I am not too fond of it - it seems like an difficult to understand mess of an API as visible in [downshift](https://github.com/paypal/downshift). 
+
+After doing the exercise 8 and learning the `state reducer` pattern, I can see its value. It allows the clients of your API to make changes in internal state of the used component. So internal logic is exposed in a controlled way - changes happen as they would, but the client can add its own state and stop/alter the propagation of existing changes.
 
 ## Following along with Frontend Masters?
 
