@@ -12,32 +12,47 @@ class Toggle extends React.Component {
   //
   // 🐨 Rather than initializing state to have on as false,
   // set on to this.props.initialOn
-  state = {on: false}
+  static defaultProps = {
+    initialOn: false,
+    onReset: () => null,
+  }
+  state = {on: this.props.initialOn}
 
   // 🐨 now let's add a reset method here that resets the state
   // to the initial state. Then add a callback that calls
   // this.props.onReset with the `on` state.
+  reset = () => {
+    this.setState({on: Toggle.defaultProps.initialOn}, () =>
+      this.props.onReset(this.state.on),
+    )
+  }
+
   toggle = () =>
     this.setState(
       ({on}) => ({on: !on}),
       () => this.props.onToggle(this.state.on),
     )
-  getTogglerProps = ({onClick, ...props} = {}) => {
+
+  getTogglerProps = ({onClick, onReset, ...props} = {}) => {
     return {
       'aria-pressed': this.state.on,
       onClick: callAll(onClick, this.toggle),
+      onReset: callAll(onReset, this.reset),
       ...props,
     }
   }
+
   getStateAndHelpers() {
     return {
       on: this.state.on,
       toggle: this.toggle,
+      reset: this.reset,
       // 🐨 now let's include the reset method here
       // so folks can use that in their implementation.
       getTogglerProps: this.getTogglerProps,
     }
   }
+
   render() {
     return this.props.children(this.getStateAndHelpers())
   }
