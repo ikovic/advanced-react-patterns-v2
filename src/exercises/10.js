@@ -14,15 +14,31 @@ class Toggle extends React.Component {
   // It can accept a string called `prop` and should return
   // true if that prop is controlled
   // 💰 this.props[prop] !== undefined
-  //
+  isControlled = prop => this.props[prop] !== undefined
+
   // 🐨 Now let's add a function that can return the state
   // whether it's coming from this.state or this.props
   // Call it `getState` and have it return on from
   // state if it's not controlled or props if it is.
+  getState = () => {
+    return Object.keys(this.state).reduce((state, key) => {
+      return {
+        ...state,
+        [key]: this.isControlled(key)
+          ? this.props[key]
+          : this.state[key],
+      }
+    }, {})
+  }
+
   toggle = () => {
     // 🐨 if the toggle is controlled, then we shouldn't
     // be updating state. Instead we should just call
     // `this.props.onToggle` with what the state should be
+    if (this.isControlled('onToggle') && this.isControlled('on')) {
+      return this.props.onToggle(!this.props.on)
+    }
+
     this.setState(
       ({on}) => ({on: !on}),
       () => {
@@ -33,7 +49,7 @@ class Toggle extends React.Component {
   render() {
     // 🐨 rather than getting state from this.state,
     // let's use our `getState` method.
-    const {on} = this.state
+    const {on} = this.getState()
     return <Switch on={on} onClick={this.toggle} />
   }
 }
