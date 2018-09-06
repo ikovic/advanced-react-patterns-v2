@@ -9,6 +9,43 @@ import {Switch} from '../switch'
 
 class Toggle extends React.Component {
   state = {on: false}
+
+  internalSetState = (changes, callback = () => null) => {
+    const {onStateChange} = this.props
+
+    let allChanges = null
+    this.setState(
+      state => {
+        const allState = this.getState(state)
+        const changesHolder =
+          typeof changes === 'function' ? changes(allState) : changes
+
+        allChanges = changesHolder
+        // don't keep type in state
+        const {type: ignoredType, ...onlyChanges} = changesHolder
+
+        // determine if there are internal changes, don't setState if not
+        const nonControlledChanges = Object.entries(
+          onlyChanges,
+        ).reduce((internalChanges, [key, value]) => {
+          if (!this.isControlled(key)) {
+            internalChanges[key] = value
+          }
+          return internalChanges
+        }, {})
+
+        return Object.keys(nonControlledChanges).length
+          ? nonControlledChanges
+          : null
+      },
+      () => {
+        typeof onStateChange === 'function' &&
+          onStateChange(allChanges, this.getState())
+        callback()
+      },
+    )
+  }
+
   // 🐨 let's add a function that can determine whether
   // the on prop is controlled. Call it `isControlled`.
   // It can accept a string called `prop` and should return
@@ -20,10 +57,10 @@ class Toggle extends React.Component {
   // whether it's coming from this.state or this.props
   // Call it `getState` and have it return on from
   // state if it's not controlled or props if it is.
-  getState = () => {
-    return Object.keys(this.state).reduce((state, key) => {
+  getState = (state = this.state) => {
+    return Object.keys(state).reduce((allState, key) => {
       return {
-        ...state,
+        ...allState,
         [key]: this.isControlled(key)
           ? this.props[key]
           : this.state[key],
@@ -35,15 +72,13 @@ class Toggle extends React.Component {
     // 🐨 if the toggle is controlled, then we shouldn't
     // be updating state. Instead we should just call
     // `this.props.onToggle` with what the state should be
-    if (this.isControlled('onToggle') && this.isControlled('on')) {
+    if (this.isControlled('on')) {
       return this.props.onToggle(!this.props.on)
     }
 
-    this.setState(
-      ({on}) => ({on: !on}),
-      () => {
-        this.props.onToggle(this.state.on)
-      },
+    this.internalSetState(
+      ({on}) => ({type: 'toggle', on: !on}),
+      () => this.props.onToggle(this.getState().on),
     )
   }
   render() {
