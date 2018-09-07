@@ -14,6 +14,8 @@ Exercises 4-7 show us how to use render props. I am not too fond of it - it seem
 After doing the exercise 8 and learning the `state reducer` pattern, I can see its value. It allows the clients of your API to make changes in internal state of the used component. So internal logic is exposed in a controlled way - changes happen as they would, but the client can add its own state and stop/alter the propagation of existing changes.
 Additional flexibility can be gained by testing if state is controlled by just checking if the control prop is passed. Then the internal state reducer won't call `setState` if only controlled props have changed.
 
+Final exercise showed me how to improve on Higher Order Components. Some utilities first - it's very nice to have `displayName` as a static property of the component returned from HOC. You can take it from wrapped component static property `name` or `displayName`. Since refs can be passed down too (they are not included in props), `React.forwardRef` can be used in that case. There is also a useful 3rd party module `hoist-non-react-statics` which will copy all the non-React static variables from the wrapped component to the wrapper.
+
 ## Following along with Frontend Masters?
 
 Head to
