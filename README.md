@@ -12,6 +12,7 @@ Context API is used by the parent component to provide the significant props to 
 Exercises 4-7 show us how to use render props. I am not too fond of it - it seems like an difficult to understand mess of an API as visible in [downshift](https://github.com/paypal/downshift). 
 
 After doing the exercise 8 and learning the `state reducer` pattern, I can see its value. It allows the clients of your API to make changes in internal state of the used component. So internal logic is exposed in a controlled way - changes happen as they would, but the client can add its own state and stop/alter the propagation of existing changes.
+Additional flexibility can be gained by testing if state is controlled by just checking if the control prop is passed. Then the internal state reducer won't call `setState` if only controlled props have changed.
 
 ## Following along with Frontend Masters?
 
